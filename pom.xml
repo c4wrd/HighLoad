@@ -6,7 +6,7 @@
 
     <groupId>com.c4wrd.topcoder</groupId>
     <artifactId>loadtester</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <dependencies>
 
@@ -17,35 +17,49 @@
         </dependency>
 
         <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>3.7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <version>10.12.1.1</version>
-        </dependency>
-
-        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
 
         <dependency>
-            <groupId>com.googlecode.lanterna</groupId>
-            <artifactId>lanterna</artifactId>
-            <version>2.1.9</version>
-        </dependency>
-        <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.lanterna</groupId>
+            <artifactId>lanterna</artifactId>
+            <version>2.1.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dnl.utils</groupId>
+            <artifactId>j-text-utils</artifactId>
+            <version>0.3.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.9</version>
+        </dependency>
+
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>d-maven</id>
+            <url>http://d-maven.googlecode.com/svn/trunk/repo</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
@@ -60,7 +74,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.c4wrd.topcoder.LoadTester</mainClass>
+                            <mainClass>com.c4wrd.loadtester.LoadTester</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

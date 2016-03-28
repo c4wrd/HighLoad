@@ -10,8 +10,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
-class RequestRunnable implements Callable<RequestDetail> {
+public class RequestRunnable implements Callable<RequestDetail> {
 
     private static RequestOptions requestOptions = RequestOptions.DEFAULT;
     /**
@@ -50,10 +51,9 @@ class RequestRunnable implements Callable<RequestDetail> {
      * @param url:           The URL being requested
      * @param numberThreads: The number of threads (used to find zero-index based id)
      */
-    public RequestRunnable(String url, boolean saveThreadId, int numberThreads) {
+    public RequestRunnable(String url, int numberThreads) {
         this.url = url;
         this.payload = numberThreads;
-        this.saveThreadId = true;
     }
 
     /**
@@ -65,42 +65,10 @@ class RequestRunnable implements Callable<RequestDetail> {
         requestOptions = options;
     }
 
-    /**
-     * Performs the request, saves the response time, and returns details regarding the
-     * request.
-     */
-    @Override
-    public RequestDetail call() throws Exception {
-        Long startTime = System.currentTimeMillis();
-        URL url = new java.net.URL(this.url);
-
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        this.setupRequestOptions(connection);
-        connection.connect();
-
-        int response_time = (int) (System.currentTimeMillis() - startTime);
-
-        RequestDetail detail = new RequestDetail(this.url);
-
-        if (requestOptions.readInputStream) {
-            detail.setResponse(this.getResponse(connection));
-        }
-
-        if (this.saveThreadId) {
-            this.payload = Thread.currentThread().getId() % (int) this.payload;
-        }
-
-        detail.setPayload(this.payload);
-
-        detail.setServerResponseTime(response_time);
-
-        return detail;
-    }
-
     private void setupRequestOptions(HttpURLConnection connection) {
-        if (requestOptions.readInputStream)
+        if (requestOptions.readInputStream) {
             connection.setDoInput(true);
+        }
 
         for (Map.Entry<String, String> entry : requestOptions.urlProperties.entrySet()) {
             connection.setRequestProperty(entry.getKey(), entry.getValue());
@@ -108,20 +76,55 @@ class RequestRunnable implements Callable<RequestDetail> {
     }
 
     /**
-     * Helper to get the response from a specified HttpURLConnection
+     * Helper to cacheRows the response from a specified HttpURLConnection
      *
      * @param connection: Connection waiting with an input stream
      */
     private String getResponse(HttpURLConnection connection) throws IOException {
-        BufferedReader stream = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder response = new StringBuilder();
 
+        BufferedReader br;
+
+        if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+            br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
+        } else {
+            br = new BufferedReader(new InputStreamReader((connection.getErrorStream())));
+        }
+
+        StringBuilder response = new StringBuilder();
         String line;
-        while ((line = stream.readLine()) != null) {
+        while ((line = br.readLine()) != null) {
             response.append(line);
         }
 
         return response.toString();
+    }
+
+    /**
+     * Performs the request, saves the response time, and returns details regarding the
+     * request.
+     */
+    @Override
+    public RequestDetail call() throws Exception {
+        URL url = new java.net.URL(this.url);
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET" );
+        this.setupRequestOptions(connection);
+
+        Long startTime = System.currentTimeMillis();
+        connection.connect();
+        String response = requestOptions.readInputStream ? this.getResponse(connection) : null;
+        int response_time = (int) (System.currentTimeMillis() - startTime);
+
+        RequestDetail detail = new RequestDetail(this.url);
+        if (requestOptions.readInputStream) {
+            detail.setResponse(response);
+        }
+        detail.setPayload(this.payload);
+        detail.setServerResponseTime(response_time);
+
+        return detail;
+
     }
 
 }

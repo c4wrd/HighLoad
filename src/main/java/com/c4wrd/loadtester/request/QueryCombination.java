@@ -5,17 +5,17 @@ import java.util.List;
 
 public class QueryCombination {
 
-    private List<QueryParam> queryParameterValues;
+    private List<QueryParameter> queryParameterValues;
 
     public QueryCombination() {
         this.queryParameterValues = new LinkedList<>();
     }
 
-    public void addQueryParameter(QueryParam parameter) {
+    public void addQueryParameter(QueryParameter parameter) {
         this.queryParameterValues.add(parameter);
     }
 
-    public List<QueryParam> getQueryParameterValues() {
+    public List<QueryParameter> getQueryParameterValues() {
         return this.queryParameterValues;
     }
 

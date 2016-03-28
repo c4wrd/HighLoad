@@ -1,15 +1,17 @@
 package com.c4wrd.loadtester.request;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.c4wrd.loadtester.util.RandomSelector;
 
-public class QueryParam {
+import java.util.ArrayList;
+import java.util.List;
+
+public class QueryParameter {
 
     private String query_parameter;
     private List<String> values;
+    private String alias;
 
-    public QueryParam(String query_parameter) {
+    public QueryParameter(String query_parameter) {
         this.query_parameter = query_parameter;
         this.values = new ArrayList<String>();
     }
@@ -26,11 +28,18 @@ public class QueryParam {
         return query_parameter;
     }
 
-    public List<String> getValues() {
-        return values;
+    public void setDatabackingAlias(String alias) {
+        this.alias = alias;
     }
 
-    public String getRandomParam() {
+    public String getRandomParam(QueryDataRow row) {
+
+        // our value is stored in the data-set
+        if (this.alias != null) {
+            return query_parameter + "=" + row.getValueMap().get(this.alias);
+        }
+
+        // read from the values stored here
         String selectedValue = values.get(RandomSelector.nextInt(values.size()));
         return query_parameter + "=" + selectedValue;
     }

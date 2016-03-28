@@ -41,10 +41,12 @@ public class Endpoint {
                     RandomSelector.nextInt(queryParameterCombinations.size())
             );
 
+            QueryDataRow selectedRow = QueryParameterSupplier.getRandomRow();
+
             builder.append(
                     selectedCombination.getQueryParameterValues()
                             .stream()
-                            .map(QueryParam::getRandomParam)
+                            .map(param -> param.getRandomParam(selectedRow))
                             .collect(Collectors.joining("&")));
 
         }

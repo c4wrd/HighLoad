@@ -12,7 +12,7 @@ public enum TestType {
         this.value = i;
     }
 
-    public TestType fromString(String str) {
+    public static TestType fromString(String str) {
 
         switch (str.toLowerCase()) {
             case "constant":
@@ -23,6 +23,6 @@ public enum TestType {
                 return BOTTLENECK;
         }
 
-        return null;
+        throw new IllegalArgumentException(String.format("The value %s is not valid for test_type", str));
     }
 }

@@ -2,11 +2,15 @@ package com.c4wrd.loadtester.testservice;
 
 import com.c4wrd.loadtester.request.Endpoint;
 import com.c4wrd.loadtester.request.RequestDetail;
+import com.c4wrd.loadtester.util.LogLevel;
+import com.c4wrd.loadtester.util.Output;
+import com.sun.corba.se.spi.orbutil.threadpool.ThreadPool;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public abstract class RequestTest<ExecutorType extends ExecutorService> {
 
@@ -41,17 +45,8 @@ public abstract class RequestTest<ExecutorType extends ExecutorService> {
     /**
      * Set's the url used within the test.
      */
-    public void setUrl(String host) {
+    public void setHost(String host) {
         this.host = host;
-    }
-
-    /**
-     * Shuts down the test after it has been ran. If the test is still running, this will
-     * cause the test to not save results.
-     */
-    public void shutdown() {
-        this.requestExecutorService.shutdownNow();
-        this.intervalService.shutdownNow();
     }
 
     /**
@@ -60,11 +55,7 @@ public abstract class RequestTest<ExecutorType extends ExecutorService> {
      */
     public abstract List<RequestDetail> run() throws ExecutionException, InterruptedException, IOException;
 
-    /**
-     * Reports the progress.
-     */
-    protected void report(String formattedString, Object... args) throws IOException {
-        System.out.println(String.format(formattedString, args));
-    }
+
+    public abstract void printResults(List<RequestDetail> results);
 
 }

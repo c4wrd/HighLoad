@@ -11,31 +11,31 @@ import java.util.stream.Collector;
  * A reservoir sample is an algorithm that takes a list N of n elements
  * and selects k random elements from the list into list K, where each element in
  * the list N has a 1/n chance of being in K.
- *
+ * <p>
  * This implementation allows the random choosing of elements from an indefinite
  * stream of elements, forming an accurate (at the cost of Random not necessarily
  * producing random integers).
+ *
  * @param <T>
  */
-class ReservoirCollector<T> implements Collector<T, List<T>, List<T>> {
+public class ReservoirCollector<T> implements Collector<T, List<T>, List<T>> {
 
     /**
      * The desired number of elements to acquire randomly from the stream
      */
     private final int k;
-
+    /**
+     * Random instance used to calculate our seed.
+     */
+    private final Random rand;
     /**
      * Represents the current index in the stream, used for generating our seed.
      */
     private int sIndex;
 
     /**
-     * Random instance used to calculate our seed.
-     */
-    private final Random rand;
-
-    /**
      * Initializes a Reservoir sampler
+     *
      * @param numDesiredItems
      */
     public ReservoirCollector(int numDesiredItems) {
@@ -60,16 +60,13 @@ class ReservoirCollector<T> implements Collector<T, List<T>, List<T>> {
         return (final List<T> selected, T element) -> {
             sIndex++;    // increment our sIndex in the stream
 
-            if (selected.size() < k)
-            {
+            if (selected.size() < k) {
                 // we want to add the first K elements to our array
                 selected.add(element);
-            }
-            else
-            {
+            } else {
                 // note, the sIndex will be off by 1 as
                 // we are using a zero-sIndex base
-                int seed = rand.nextInt() % (this.sIndex + 1);
+                int seed = Math.abs(rand.nextInt() % (this.sIndex + 1));
 
                 if (seed < k) {   // we have an item we can add
                     selected.set(seed, element);

@@ -8,6 +8,11 @@ public class RequestDetail {
     private String endpoint;
 
     /**
+     * The query parameters associated with the request.
+     */
+    private String queryParameters;
+
+    /**
      * The time the server took to respond
      * to our request
      */
@@ -31,17 +36,19 @@ public class RequestDetail {
     private String response;
 
     public RequestDetail(String endpoint) {
-        this.endpoint = sanitizeEndpoint(endpoint);
+        sanitizeEndpoint(endpoint);
         this.requestTime = System.currentTimeMillis();
     }
 
-    private String sanitizeEndpoint(String endpoint) {
+    private void sanitizeEndpoint(String endpoint) {
 
         if (endpoint.indexOf('?') != -1) {
-            return endpoint.substring(0, endpoint.indexOf('?'));
+            this.endpoint = endpoint.substring(0, endpoint.indexOf('?'));
+            this.queryParameters = endpoint.substring(endpoint.indexOf('?'), endpoint.length());
+        } else {
+            this.endpoint = endpoint;
+            this.queryParameters = "None";
         }
-
-        return endpoint;
     }
 
     public String getEndpoint() {
@@ -74,5 +81,9 @@ public class RequestDetail {
 
     public void setResponse(String response) {
         this.response = response;
+    }
+
+    public String getQueryParameters() {
+        return queryParameters;
     }
 }
