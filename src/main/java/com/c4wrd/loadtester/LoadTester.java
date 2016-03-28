@@ -107,12 +107,6 @@ public class LoadTester {
                 "save the results to a specified file"
         ));
 
-        options.addOption(new Option(
-                "chart",
-                false,
-                "display the results of this test in a Swing chart"
-        ));
-
         options.addOption(
                 "v",
                 "verbose",
