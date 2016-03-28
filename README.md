@@ -199,3 +199,42 @@ Here is a list of possible commands:
                           file, overriding the default test
  -v,--verbose             display verbose results in the output stream
 ```
+
+### Example output:
+
+Here is the example output of running this program:
+```
+*************************************************
+* Host:           https://community.topcoder-dev.com
+* Dataset:        data.csv                      
+* Number Threads: 100                           
+* Interval:       10                            
+* Endpoints:      [graph, stat]                 
+*************************************************
+..........______________________________
+| Interval| Avg. Response Time|
+|=============================|
+| 1       | 6009.28           |
+| 2       | 130.21            |
+| 3       | 562.49            |
+| 4       | 649.71            |
+| 5       | 533.68            |
+| 6       | 515.11            |
+| 7       | 309.28            |
+| 8       | 477.24            |
+| 9       | 346.28            |
+| 10      | 518.8             |
+
+______________________________
+| Endpoint| Avg. Response Time|
+|=============================|
+| /graph  | 922.5711382113822 |
+| /stat   | 1085.242125984252 |
+
+Summary
+-------
+Average overall:                  1005.208 ms
+Longest on avg:            /stat: 1085.242 ms
+```
+
+Also, more detailed specifics are stored in a .xlsx file for viewing in the current directory!
