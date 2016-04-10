@@ -6,6 +6,8 @@ HighLoad is a fast and strong load testing tool built for TopCoder.
 It requires JDK8. Please read the following to understand more of how
 it works and what it can do for your service.
 
+Note*: This was developed for a Hackathon that lasted 24 hours. The majority of the application should work as expected, but as it was developed from the ground up in a single day, this project is prone to have errors. Also, you can see where time was running out during the development of the HighLoad class and the main class. 
+
 ## Types of Tests
 
 ### Constant Load:
